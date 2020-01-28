@@ -1,0 +1,16 @@
+RewriteEngine On
+Options ALl -Indexes
+
+# ROUTER WWW Redirect.
+#RewriteCond %{HTTP_HOST} !^www\. [NC]
+#RewriteRule ^ https://www.%[{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+# ROUTER HTTPS Redirect
+RewriteCond %{HTTP:X-Forward-Proto} !https
+RewriteCond %{HTTPS} off
+RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+# ROUTER URL Redirect
+RewriteCond %{SCRIPT_FILENAME} !-F
+RewriteCond %{SCRIPT_FILENAME} !-d
+RewriteRule ^(.*)$ index.php?route=/$1 [L,QSA]
