@@ -12,6 +12,13 @@ define("SITE", [
 ]);
 
 /**
+ * PROJECT PATHS/NAMESPACES CONFIG
+ */
+define("NAMESPACE_CONTROLLERS", "Source\Controllers");
+define("PATH_VIEWS", "/views");
+define("PATH_STORAGE", "/storage");
+
+/**
  * SITE MINIFY
  */
 if (in_array($_SERVER["SERVER_NAME"], ["localhost", "127.0.0.1"])) {
@@ -42,7 +49,7 @@ define("DATA_LAYER_CONFIG", [
 define("SOCIAL", [
     "facebook_page" => "djalmocruzjr",
     "facebook_author" => "djalmocruzjr",
-    "facebook_app_id" => "",
+    "facebook_app_id" => "djalmocruzjr",
     "twitter_creator" => "@djalmocruzjr",
     "twitter_site" => "@djalmocruzjr",
 ]);

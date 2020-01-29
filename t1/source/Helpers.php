@@ -15,7 +15,37 @@ function site(string $param = null): string
  */
 function asset(string $path): string
 {
-    return site() . "/views/assets/{$path}";
+    return site() . "/" . PATH_VIEWS . "/assets/{$path}";
+}
+
+/**
+ * @param string $imageName
+ * @return string|null
+ */
+function image(string $imageName): ?string
+{
+    return "https://via.placeholder.com/1200x628.png?text={$imageName}";
+}
+
+/**
+ * @param string $key
+ * @param string|null $value
+ * @param bool $clean
+ * @return string|null
+ */
+function session(string $key, string $value = null, bool $clean = false): ?string
+{
+    if (!empty($value)) {
+        $_SESSION[$key] = $value;
+        return $value;
+    }
+
+    if (!empty($_SESSION[$key]) && empty($value) && $clean) {
+        unset($_SESSION[$key]);
+        return null;
+    }
+
+    return $_SESSION[$key] ?? null;
 }
 
 /**
@@ -28,7 +58,7 @@ function flash(string $type = null, string $message = null): ?string
     if ($type && $message) {
         $_SESSION["flash"] = [
             "type" => $type,
-            "messa" => $message
+            "message" => $message
         ];
         return null;
     }
@@ -40,6 +70,18 @@ function flash(string $type = null, string $message = null): ?string
 
     return null;
 }
+
+/**
+ * @param string|null $param
+ * @return string|null
+ */
+function social(string $param = null): ?string
+{
+    return ($param && !empty(SOCIAL[$param])) ? SOCIAL[$param] : null;
+}
+
+
+
 
 
 
