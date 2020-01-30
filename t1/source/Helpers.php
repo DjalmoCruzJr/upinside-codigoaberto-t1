@@ -11,11 +11,17 @@ function site(string $param = null): string
 
 /**
  * @param string $path
+ * @param bool $time
  * @return string
  */
-function asset(string $path): string
+function asset(string $path, bool $time = true): string
 {
-    return site() . PATH_VIEWS . PATH_ASSETS . $path;
+    $file = site() . PATH_VIEWS . PATH_ASSETS . $path;
+    $fileOnDir = dirname(__DIR__, 1) . PATH_VIEWS . PATH_ASSETS . $path;
+    if ($time && file_exists($fileOnDir)) {
+        $file .= "?time=" . fileatime($fileOnDir);
+    }
+    return $file;
 }
 
 /**

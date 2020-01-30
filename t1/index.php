@@ -10,6 +10,7 @@ use CoffeeCode\Router\Router;
 $router = new Router(site());
 $router->namespace(NAMESPACE_CONTROLLERS);
 
+
 /**
  * WEB
  */
