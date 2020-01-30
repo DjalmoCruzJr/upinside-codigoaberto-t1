@@ -4,9 +4,17 @@
 namespace Source\Controllers;
 
 
+/**
+ * Class Web
+ * @package Source\Controllers
+ */
 class Web extends Controller
 {
 
+    /**
+     * Web constructor.
+     * @param $router
+     */
     public function __construct($router)
     {
         parent::__construct($router);
@@ -16,6 +24,9 @@ class Web extends Controller
         }
     }
 
+    /**
+     * LOGIN
+     */
     public function login(): void
     {
         $head = $this->seo->optimize(
@@ -30,6 +41,9 @@ class Web extends Controller
         ]);
     }
 
+    /**
+     * REGISTER
+     */
     public function register(): void
     {
         $head = $this->seo->optimize(
@@ -50,6 +64,9 @@ class Web extends Controller
         ]);
     }
 
+    /**
+     * FORGET
+     */
     public function forget(): void
     {
         $head = $this->seo->optimize(
@@ -64,6 +81,10 @@ class Web extends Controller
         ]);
     }
 
+    /**
+     * RESET
+     * @param array $data
+     */
     public function reset(array $data): void
     {
         $head = $this->seo->optimize(
@@ -78,6 +99,10 @@ class Web extends Controller
         ]);
     }
 
+    /**
+     * ERROR
+     * @param array $data
+     */
     public function error(array $data): void
     {
         $error = filter_var($data["errcode"], FILTER_VALIDATE_INT);
