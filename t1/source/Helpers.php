@@ -15,7 +15,7 @@ function site(string $param = null): string
  */
 function asset(string $path): string
 {
-    return site() . "/" . PATH_VIEWS . "/assets/{$path}";
+    return site() . PATH_VIEWS . PATH_ASSETS . $path;
 }
 
 /**
@@ -24,7 +24,7 @@ function asset(string $path): string
  */
 function image(string $imageName): ?string
 {
-    return "https://via.placeholder.com/1200x628.png?text={$imageName}";
+    return "https://via.placeholder.com/1200x628/0984e3/FFFFFF.png?text={$imageName}";
 }
 
 /**

@@ -32,7 +32,7 @@ abstract class Controller
         $this->router = $router;
 
         /** @TODO ta dando pau aqui... */
-        $this->view = Engine::create(__DIR__ . PATH_VIEWS, "php");
+        $this->view = Engine::create(dirname(__DIR__, 2) . PATH_VIEWS, "php");
         $this->view->addData(["router" => $router]);
 
         $this->seo = new Optimizer();

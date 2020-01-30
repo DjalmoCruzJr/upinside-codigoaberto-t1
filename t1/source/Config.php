@@ -16,6 +16,7 @@ define("SITE", [
  */
 define("NAMESPACE_CONTROLLERS", "Source\Controllers");
 define("PATH_VIEWS", "/views");
+define("PATH_ASSETS", "/assets");
 define("PATH_STORAGE", "/storage");
 
 /**
