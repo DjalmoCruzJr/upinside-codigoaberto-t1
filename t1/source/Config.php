@@ -80,3 +80,18 @@ define("MESSAGE_TYPE_ERROR", "error");
 define("RESPONSE_MESSAGE", "message");
 define("RESPONSE_REDIRECT", "redirect");
 define("RESPONSE_URL", "url");
+
+/**
+ * EMAIL CONFIG
+ */
+define("EMAIL", [
+    "host" => "smtp.sendgrid.net",
+    "port" => "587",
+    "username" => "apiKey",
+    "passwd" => "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",
+    "protocol" => "tls",
+    "charset" => "utf-8",
+    "lang" => "br",
+    "from_name" => "Djalmo Cruz Jr",
+    "from_address" => "djalmo.cruz@gmail.com",
+]);

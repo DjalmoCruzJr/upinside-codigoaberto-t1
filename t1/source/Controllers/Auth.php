@@ -54,8 +54,7 @@ class Auth extends Controller
     /**
      * @param array $data
      */
-    public
-    function register(array $data): void
+    public function register(array $data): void
     {
         $data = filter_var_array($data, FILTER_SANITIZE_STRIPPED);
 
