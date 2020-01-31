@@ -65,3 +65,18 @@ define("MAIL", []);
  */
 define("FACEBOOK_LOGIN", []);
 define("GOOGLE_LOGIN", []);
+
+
+/**
+ * SESSION/MESSAGE/RESPONSE CONFIG
+ */
+define("SESSION_USER_ID", "user_id");
+define("MESSAGE_MSG", "message");
+define("MESSAGE_TYPE", "type");
+define("MESSAGE_TYPE_SUCCESS", "success");
+define("MESSAGE_TYPE_INFO", "info");
+define("MESSAGE_TYPE_ALERT", "alert");
+define("MESSAGE_TYPE_ERROR", "error");
+define("RESPONSE_MESSAGE", "message");
+define("RESPONSE_REDIRECT", "redirect");
+define("RESPONSE_URL", "url");

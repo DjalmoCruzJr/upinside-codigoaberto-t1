@@ -11,26 +11,26 @@
                 <label>
                     <span class="field">Nome:</span>
                     <input value="<?= $user->first_name; ?>" type="text" name="first_name"
-                           placeholder="Primeiro nome:"/>
+                           placeholder="Primeiro nome:" required/>
                 </label>
 
                 <label>
                     <span class="field">Sobrenome:</span>
                     <input value="<?= $user->last_name; ?>" type="text" name="last_name"
-                           placeholder="Último nome:"/>
+                           placeholder="Último nome:" required/>
                 </label>
             </div>
 
             <label>
                 <span class="field">E-mail:</span>
                 <input value="<?= $user->email; ?>" type="email" name="email"
-                       placeholder="Informe seu e-mail:"/>
+                       placeholder="Informe seu e-mail:" required/>
             </label>
 
             <label>
                 <span class="field">Senha:</span>
                 <input autocomplete="" type="password" name="passwd"
-                       placeholder="Informe sua senha:"/>
+                       placeholder="Informe sua senha:" required/>
             </label>
 
             <div class="form_actions">

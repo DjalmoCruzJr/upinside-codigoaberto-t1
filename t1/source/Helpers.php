@@ -46,7 +46,7 @@ function session(string $key, string $value = null, bool $clean = false): ?strin
         return $value;
     }
 
-    if (!empty($_SESSION[$key]) && empty($value) && $clean) {
+    if (!empty($_SESSION[$key]) && $clean) {
         unset($_SESSION[$key]);
         return null;
     }
@@ -71,7 +71,7 @@ function flash(string $type = null, string $message = null): ?string
 
     if (!empty($_SESSION["flash"]) && $flash = $_SESSION["flash"]) {
         unset($_SESSION["flash"]);
-        return "<div class=\"message {$type}\">{$flash["message"]}</div>";
+        return "<div class=\"message {$flash["type"]}\">{$flash["message"]}</div>";
     }
 
     return null;

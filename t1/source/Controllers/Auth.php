@@ -25,14 +25,44 @@ class Auth extends Controller
     /**
      * @param array $data
      */
-    public function register(array $data): void
+    public function login(array $data): void
+    {
+        $email = filter_var($data["email"], FILTER_VALIDATE_EMAIL);
+        $passwd = filter_var($data["passwd"], FILTER_DEFAULT);
+
+        if (!$email || !$passwd) {
+            echo $this->ajaxResponse(MESSAGE_MSG, [
+                MESSAGE_TYPE => MESSAGE_TYPE_ERROR,
+                MESSAGE_MSG => "Informe seu e-mail e sua senha para logar",
+            ]);
+            return;
+        }
+
+        $user = (new User())->find("email= :e", "e={$email}")->fetch();
+        if (!$user || password_verify($passwd, $user->passwd)) {
+            echo $this->ajaxResponse(RESPONSE_MESSAGE, [
+                MESSAGE_TYPE => MESSAGE_TYPE_ERROR,
+                MESSAGE_MSG => "E-mail e/ou senha inválido(s)"
+            ]);
+            return;
+        }
+
+        session(SESSION_USER_ID, $user->id);
+        echo $this->ajaxResponse(RESPONSE_REDIRECT, [RESPONSE_URL => $this->router->route("app.home")]);
+    }
+
+    /**
+     * @param array $data
+     */
+    public
+    function register(array $data): void
     {
         $data = filter_var_array($data, FILTER_SANITIZE_STRIPPED);
 
         if (in_array("", $data)) {
-            echo $this->ajaxResponse("message", [
-                "type" => "error",
-                "message" => "Preencha todos os campos para se cadastrar"
+            echo $this->ajaxResponse(RESPONSE_MESSAGE, [
+                MESSAGE_TYPE => MESSAGE_TYPE_ERROR,
+                MESSAGE_MSG => "Preencha todos os campos para se cadastrar"
             ]);
             return;
         }
@@ -46,11 +76,11 @@ class Auth extends Controller
         if (!$user->save()) {
             echo $this->ajaxResponse("message", [
                 "type" => "error",
-                "message" => $user->fail()
+                "message" => $user->fail()->getMessage()
             ]);
             return;
         }
-        session("user", $user->id);
+        session(SESSION_USER_ID, $user->id);
 
         echo $this->ajaxResponse("redirect", [
             "url" => $this->router->route("app.home")

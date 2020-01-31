@@ -14,11 +14,11 @@
 
             <label>
                 <span class="field">E-mail:</span>
-                <input value="" type="email" name="email" placeholder="Informe seu e-mail:"/>
+                <input value="" type="email" name="email" placeholder="Informe seu e-mail:" required/>
             </label>
             <label>
                 <span class="field">Senha:</span>
-                <input autocomplete="" type="password" name="passwd" placeholder="Informe sua senha:"/>
+                <input autocomplete="" type="password" name="passwd" placeholder="Informe sua senha:" required/>
             </label>
 
             <div class="form_actions">

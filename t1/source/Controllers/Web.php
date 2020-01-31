@@ -19,9 +19,9 @@ class Web extends Controller
     {
         parent::__construct($router);
 
-        //        if (!empty(session("user"))) {
-        //            $this->router->redirect("app.home");
-        //        }
+        if (!empty(session(SESSION_USER_ID))) {
+            $this->router->redirect("app.home");
+        }
     }
 
     /**
