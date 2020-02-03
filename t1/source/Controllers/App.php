@@ -15,8 +15,8 @@ class App extends Controller
     {
         parent::__construct($router);
 
-        if (empty(session(SESSION_USER_ID)) || !$this->user = (new User())->findById(session(SESSION_USER_ID))) {
-            session(SESSION_USER_ID, null, true);
+        if (empty(session(SESSION_USER)) || !$this->user = (new User())->findById(session(SESSION_USER))) {
+            session(SESSION_USER, null, true);
 
             flash(FLASH_TYPE_ERROR, "Acesso negado! Por favor, faça login para acessar");
             $this->router->redirect("web.login");
@@ -40,8 +40,8 @@ class App extends Controller
 
     public function logoff(): void
     {
-        session(SESSION_USER_ID, null, true);
-        flash(FLASH_TYPE_INFO, "Você saiu com sucesso! Volte logo {$this->user->first_name}...");
+        session(SESSION_USER, null, true);
+        flash(MESSAGE_TYPE_SUCCESS, "Você saiu com sucesso! Volte logo {$this->user->first_name}...");
         $this->router->redirect("web.login");
     }
 

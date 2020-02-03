@@ -40,7 +40,7 @@ class User extends DataLayer
             return false;
         }
 
-        if ($this->find("email = :e", "e={$this->email}")->count()) {
+        if ($this->find("email = :e", "e={$this->email}")->count() && empty($this->id)) {
             $this->fail = new \Exception("Já existe um usuário cadastrado com esse e-mail");
             return false;
         }

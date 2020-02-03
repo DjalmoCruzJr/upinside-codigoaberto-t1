@@ -4,6 +4,8 @@
 namespace Source\Controllers;
 
 
+use Source\Models\User;
+
 /**
  * Class Web
  * @package Source\Controllers
@@ -19,7 +21,7 @@ class Web extends Controller
     {
         parent::__construct($router);
 
-        if (!empty(session(SESSION_USER_ID))) {
+        if (!empty(session(SESSION_USER))) {
             $this->router->redirect("app.home");
         }
     }
@@ -87,6 +89,14 @@ class Web extends Controller
      */
     public function reset(array $data): void
     {
+        if (empty(session(SESSION_FORGET)) || !$user = (new User())->findById(session(SESSION_FORGET))) {
+            session(SESSION_FORGET, null, true);
+
+            flash(MESSAGE_TYPE_INFO, "Informe seu E-MAIL para recuperar sua senha");
+            $this->router->redirect("web.forget");
+            return;
+        }
+
         $head = $this->seo->optimize(
             "Crie sua nova senha | " . site("name"),
             site("desc"),

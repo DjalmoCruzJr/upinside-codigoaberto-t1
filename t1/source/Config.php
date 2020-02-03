@@ -70,7 +70,8 @@ define("GOOGLE_LOGIN", []);
 /**
  * SESSION/MESSAGE/RESPONSE CONFIG
  */
-define("SESSION_USER_ID", "user_id");
+define("SESSION_USER", "user");
+define("SESSION_FORGET", "forget");
 define("MESSAGE_MSG", "message");
 define("MESSAGE_TYPE", "type");
 define("MESSAGE_TYPE_SUCCESS", "success");
@@ -87,8 +88,8 @@ define("RESPONSE_URL", "url");
 define("EMAIL", [
     "host" => "smtp.sendgrid.net",
     "port" => "587",
-    "username" => "apiKey",
-    "passwd" => "",
+    "username" => "apikey",
+    "passwd" => "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",
     "protocol" => "tls",
     "charset" => "utf-8",
     "lang" => "br",

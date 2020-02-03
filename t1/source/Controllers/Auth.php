@@ -5,6 +5,7 @@ namespace Source\Controllers;
 
 
 use Source\Models\User;
+use Source\Support\Email;
 
 /**
  * Class Auth
@@ -47,7 +48,7 @@ class Auth extends Controller
             return;
         }
 
-        session(SESSION_USER_ID, $user->id);
+        session(SESSION_USER, $user->id);
         echo $this->ajaxResponse(RESPONSE_REDIRECT, [RESPONSE_URL => $this->router->route("app.home")]);
     }
 
@@ -73,17 +74,84 @@ class Auth extends Controller
         $user->passwd = password_hash($data["passwd"], PASSWORD_DEFAULT);
 
         if (!$user->save()) {
-            echo $this->ajaxResponse("message", [
-                "type" => "error",
-                "message" => $user->fail()->getMessage()
+            echo $this->ajaxResponse(RESPONSE_MESSAGE, [
+                MESSAGE_TYPE => MESSAGE_TYPE_ERROR,
+                MESSAGE_MSG => $user->fail()->getMessage()
             ]);
             return;
         }
-        session(SESSION_USER_ID, $user->id);
+        session(SESSION_USER, $user->id);
 
-        echo $this->ajaxResponse("redirect", [
-            "url" => $this->router->route("app.home")
+        echo $this->ajaxResponse(RESPONSE_REDIRECT, [
+            RESPONSE_URL => $this->router->route("app.home")
         ]);
+    }
+
+    /**
+     * @param array $data
+     */
+    public function forget(array $data): void
+    {
+        $email = filter_var($data["email"], FILTER_VALIDATE_EMAIL);
+        if (!$email) {
+            echo $this->ajaxResponse(RESPONSE_MESSAGE, [
+                MESSAGE_TYPE => MESSAGE_TYPE_ERROR, MESSAGE_MSG => "Informe seu E-MAIL para recuperar sua senha"
+            ]);
+            return;
+        }
+
+        $user = (new User())->find("email = :e", "e={$email}")->fetch();
+        if (!$user) {
+            echo $this->ajaxResponse(RESPONSE_MESSAGE, [
+                MESSAGE_TYPE => MESSAGE_TYPE_ERROR,
+                MESSAGE_MSG => "O E-MAIL informado não está cadastrado"
+            ]);
+            return;
+        }
+
+        $user->forget = md5(uniqid(rand()));
+        if (!$user->save()) {
+            echo $this->ajaxResponse(RESPONSE_MESSAGE, [
+                MESSAGE_TYPE => MESSAGE_TYPE_ERROR,
+                MESSAGE_MSG => $user->fail()->getMessage()
+            ]);
+            return;
+        }
+
+        session(SESSION_FORGET, $user->id);
+
+        $email = new Email();
+        $email->add(
+            "Recuperação de Senha | " . site("name"),
+            $this->view->render("emails/recover", [
+                "user" => $user, "link" => $this->router->route("web.reset", [
+                    "email" => $user->email,
+                    "forget" => $user->forget
+                ])
+            ]),
+            "{$user->first_name} {$user->last_name}",
+            $user->email
+        );
+
+        if (!$email->send()) {
+            echo $this->ajaxResponse(RESPONSE_MESSAGE, [
+                MESSAGE_TYPE => MESSAGE_TYPE_ERROR,
+                MESSAGE_MSG => "{$email->error()->getCode()} - {$email->error()->getMessage()}"
+            ]);
+            return;
+        }
+
+        flash(MESSAGE_TYPE_SUCCESS, "Tudo certo {$user->first_name}! Enviamos um link de recuperação para seu e-mail");
+        echo $this->ajaxResponse(RESPONSE_REDIRECT, [RESPONSE_URL => $this->router->route("web.forget")]);
+    }
+
+    public function reset(array $data): void
+    {
+        if (empty(session(SESSION_FORGET)) || !$user = (new User())->findById(session(SESSION_FORGET))) {
+            flash(MESSAGE_TYPE_INFO, "Informe seu E-MAIL para recuperar sua senha");
+            $this->router->redirect("web.forget");
+        }
+
     }
 
 }
