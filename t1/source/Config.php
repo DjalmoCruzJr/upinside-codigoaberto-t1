@@ -89,7 +89,7 @@ define("EMAIL", [
     "host" => "smtp.sendgrid.net",
     "port" => "587",
     "username" => "apikey",
-    "passwd" => "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",
+    "passwd" => "",
     "protocol" => "tls",
     "charset" => "utf-8",
     "lang" => "br",
