@@ -145,13 +145,48 @@ class Auth extends Controller
         echo $this->ajaxResponse(RESPONSE_REDIRECT, [RESPONSE_URL => $this->router->route("web.forget")]);
     }
 
+    /**
+     * @param array $data
+     */
     public function reset(array $data): void
     {
-        if (empty(session(SESSION_FORGET)) || !$user = (new User())->findById(session(SESSION_FORGET))) {
-            flash(MESSAGE_TYPE_INFO, "Informe seu E-MAIL para recuperar sua senha");
-            $this->router->redirect("web.forget");
+        if (empty(session(SESSION_FORGET) || !$user = (new User())->findById(session(SESSION_FORGET)))) {
+            flash(MESSAGE_TYPE_ERROR, "Não foi possível recuperar sua senha. Tente novamente");
+            echo $this->ajaxResponse(RESPONSE_URL, [RESPONSE_URL => $this->router->route("web.forget")]);
+            return;
         }
 
+        $passwd = filter_var($data["password"], FILTER_DEFAULT);
+        $passwd_re = filter_var($data["password_re"], FILTER_DEFAULT);
+        if (empty($passwd) || empty($passwd_re)) {
+            echo $this->ajaxResponse(RESPONSE_MESSAGE, [
+                MESSAGE_TYPE => MESSAGE_TYPE_ALERT,
+                RESPONSE_MESSAGE => "Informe e repita sua senha"
+            ]);
+            return;
+        }
+
+        if ($passwd != $passwd_re) {
+            echo $this->ajaxResponse(RESPONSE_MESSAGE, [
+                MESSAGE_TYPE => MESSAGE_TYPE_ALERT,
+                MESSAGE_MSG => "As senhas não conferem"
+            ]);
+            return;
+        }
+
+        $user->passwd = password_hash($passwd, PASSWORD_DEFAULT);
+        $user->forget = null;
+        if (!$user->save()) {
+            echo $this->ajaxResponse(RESPONSE_MESSAGE, [
+                MESSAGE_TYPE => MESSAGE_TYPE_ERROR,
+                MESSAGE_MSG => $user->fail()->getMessage()
+            ]);
+            return;
+        }
+        session(SESSION_FORGET, null, true);
+
+        flash(MESSAGE_TYPE_SUCCESS, "Pronto {$user->first_name}, sua senha foi atualizada co sucesso");
+        echo $this->ajaxResponse(RESPONSE_REDIRECT, [RESPONSE_URL => $this->router->route("web.login")]);
     }
 
 }

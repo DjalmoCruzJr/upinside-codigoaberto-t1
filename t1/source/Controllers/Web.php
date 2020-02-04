@@ -89,12 +89,24 @@ class Web extends Controller
      */
     public function reset(array $data): void
     {
-        if (empty(session(SESSION_FORGET)) || !$user = (new User())->findById(session(SESSION_FORGET))) {
+        if (empty(session(SESSION_FORGET))) {
             session(SESSION_FORGET, null, true);
-
             flash(MESSAGE_TYPE_INFO, "Informe seu E-MAIL para recuperar sua senha");
             $this->router->redirect("web.forget");
             return;
+        }
+
+        $email = filter_var($data["email"], FILTER_VALIDATE_EMAIL);
+        $forget = filter_var($data["forget"], FILTER_DEFAULT);
+        if (!$email || !$forget) {
+            flash(MESSAGE_TYPE_ERROR, "Desculpe, não foi possível recuperar sua senha. Tente novamente");
+            $this->router->redirect("web.forget");
+        }
+
+        $user = (new User())->find("email = :e AND forget = :f", "e={$email}&f={$forget}")->fetch();
+        if (!$user) {
+            flash(MESSAGE_TYPE_ERROR, "Desculpe, não foi possível recuperar sua senha. Tente novamente");
+            $this->router->redirect("web.forget");
         }
 
         $head = $this->seo->optimize(
