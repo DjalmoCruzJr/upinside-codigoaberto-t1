@@ -173,7 +173,7 @@ class Auth extends Controller
             ]);
             return;
         }
-
+        
         $user->passwd = password_hash($passwd, PASSWORD_DEFAULT);
         $user->forget = null;
         if (!$user->save()) {
